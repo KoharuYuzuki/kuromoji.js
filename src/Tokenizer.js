@@ -19,7 +19,7 @@
 
 var ViterbiBuilder = require("./viterbi/ViterbiBuilder");
 var ViterbiSearcher = require("./viterbi/ViterbiSearcher");
-var IpadicFormatter = require("./util/IpadicFormatter");
+var UniDicFormatter = require("./util/UniDicFormatter");
 
 var PUNCTUATION = /、|。/;
 
@@ -33,7 +33,7 @@ function Tokenizer(dic) {
     this.unknown_dictionary = dic.unknown_dictionary;
     this.viterbi_builder = new ViterbiBuilder(dic);
     this.viterbi_searcher = new ViterbiSearcher(dic.connection_costs);
-    this.formatter = new IpadicFormatter();  // TODO Other dictionaries
+    this.formatter = new UniDicFormatter();
 }
 
 /**
@@ -94,7 +94,7 @@ Tokenizer.prototype.tokenizeForSentence = function (sentence, tokens) {
             if (features_line == null) {
                 features = [];
             } else {
-                features = features_line.split(",");
+                features = this.featuresLineSplitter(features_line);
             }
             token = this.formatter.formatEntry(node.name, last_pos + node.start_pos, node.type, features);
         } else if (node.type === "UNKNOWN") {
@@ -103,7 +103,7 @@ Tokenizer.prototype.tokenizeForSentence = function (sentence, tokens) {
             if (features_line == null) {
                 features = [];
             } else {
-                features = features_line.split(",");
+                features = this.featuresLineSplitter(features_line);
             }
             token = this.formatter.formatUnknownEntry(node.name, last_pos + node.start_pos, node.type, features, node.surface_form);
         } else {
@@ -124,6 +124,18 @@ Tokenizer.prototype.tokenizeForSentence = function (sentence, tokens) {
  */
 Tokenizer.prototype.getLattice = function (text) {
     return this.viterbi_builder.build(text);
+};
+
+Tokenizer.prototype.featuresLineSplitter = function (features_line) {
+    const regexpA = new RegExp('(".*"|[^,]*),?', 'g');
+    const regexpB = new RegExp('"?([^,|"]+),?"?', 'g');
+    const splitA = [].concat(...[...features_line.matchAll(regexpA)].map((matches) => (matches.length > 0) ? matches.slice(1) : []));
+    const splitB =
+        splitA.map((split) => [].concat(...[...split.matchAll(regexpB)].map((matches) => (matches.length > 0) ? matches.slice(1) : [])))
+        .map((split) => (split.length === 1) ? split[0] : split)
+        .filter((split) => !Array.isArray(split) || (split.length !== 0));
+
+    return splitB;
 };
 
 module.exports = Tokenizer;
