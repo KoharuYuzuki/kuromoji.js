@@ -1,104 +1,56 @@
-kuromoji.js
-===========
+# kuromoji.js
+このリポジトリは、[takuyaa / kuromoji.js](https://github.com/takuyaa/kuromoji.js/) のフォークです。
 
-[![Build Status](https://travis-ci.org/takuyaa/kuromoji.js.svg?branch=master)](https://travis-ci.org/takuyaa/kuromoji.js)
-[![Coverage Status](https://coveralls.io/repos/github/takuyaa/kuromoji.js/badge.svg?branch=master)](https://coveralls.io/github/takuyaa/kuromoji.js?branch=master)
-[![npm version](https://badge.fury.io/js/kuromoji.svg)](https://badge.fury.io/js/kuromoji)
-[![dependencies](https://david-dm.org/takuyaa/kuromoji.js.svg)](https://david-dm.org/takuyaa/kuromoji.js)
-[![Code Climate](https://codeclimate.com/github/takuyaa/kuromoji.js/badges/gpa.svg)](https://codeclimate.com/github/takuyaa/kuromoji.js)
-[![Downloads](https://img.shields.io/npm/dm/kuromoji.svg)](https://www.npmjs.com/package/kuromoji)
+## 変更点
 
-JavaScript implementation of Japanese morphological analyzer.
-This is a pure JavaScript porting of [Kuromoji](https://www.atilika.com/ja/kuromoji/).
+### 辞書
+変更前 : mecab-ipadic-2.7.0-20070801  
+変更後 : unidic-mecab_kana-accent-2.1.2  
 
-You can see how kuromoji.js works in [demo site](https://takuyaa.github.io/kuromoji.js/demo/tokenize.html).
+### フォーマッター
+変更前 : IpadicFormatter.js  
+変更後 : UniDicFormatter.js  
 
+### Tokenizer.js
+features_lineの分割方法を、カンマから正規表現に変更  
 
-Directory
----------
+## ライセンス
 
-Directory tree is as follows:
+### kuromoji.js
+Apache-2.0  
 
-    build/
-      kuromoji.js -- JavaScript file for browser (Browserified)
-    demo/         -- Demo
-    dict/         -- Dictionaries for tokenizer (gzipped)
-    example/      -- Examples to use in Node.js
-    src/          -- JavaScript source
-    test/         -- Unit test
+LICENSE-2.0.txt を参照  
 
+### unidic-mecab_kana-accent-2.1.2
+BSD-3-Clause  
 
-Usage
------
+Copyright (c) 2011-2013, The UniDic Consortium  
+All rights reserved.  
 
-You can tokenize sentences with only 5 lines of code.
-If you need working examples, you can see the files under the demo or example directory.
+Redistribution and use in source and binary forms, with or without  
+modification, are permitted provided that the following conditions are  
+met:  
 
+ * Redistributions of source code must retain the above copyright  
+   notice, this list of conditions and the following disclaimer.  
 
-### Node.js
+ * Redistributions in binary form must reproduce the above copyright  
+   notice, this list of conditions and the following disclaimer in the  
+   documentation and/or other materials provided with the  
+   distribution.  
 
-Install with npm package manager:
+ * Neither the name of the UniDic Consortium nor the names of its  
+   contributors may be used to endorse or promote products derived  
+   from this software without specific prior written permission.  
 
-    npm install kuromoji
-
-Load this library as follows:
-
-    var kuromoji = require("kuromoji");
-
-You can prepare tokenizer like this:
-
-    kuromoji.builder({ dicPath: "path/to/dictionary/dir/" }).build(function (err, tokenizer) {
-        // tokenizer is ready
-        var path = tokenizer.tokenize("すもももももももものうち");
-        console.log(path);
-    });
-
-
-
-### Browser
-
-You only need the build/kuromoji.js and dict/*.dat.gz files
-
-Install with Bower package manager:
-
-    bower install kuromoji
-
-Or you can use the kuromoji.js file and dictionary files from the GitHub repository.
-
-In your HTML:
-
-    <script src="url/to/kuromoji.js"></script>
-
-In your JavaScript:
-
-    kuromoji.builder({ dicPath: "/url/to/dictionary/dir/" }).build(function (err, tokenizer) {
-        // tokenizer is ready
-        var path = tokenizer.tokenize("すもももももももものうち");
-        console.log(path);
-    });
-
-
-API
----
-
-The function tokenize() returns an JSON array like this:
-
-    [ {
-        word_id: 509800,          // 辞書内での単語ID
-        word_type: 'KNOWN',       // 単語タイプ(辞書に登録されている単語ならKNOWN, 未知語ならUNKNOWN)
-        word_position: 1,         // 単語の開始位置
-        surface_form: '黒文字',    // 表層形
-        pos: '名詞',               // 品詞
-        pos_detail_1: '一般',      // 品詞細分類1
-        pos_detail_2: '*',        // 品詞細分類2
-        pos_detail_3: '*',        // 品詞細分類3
-        conjugated_type: '*',     // 活用型
-        conjugated_form: '*',     // 活用形
-        basic_form: '黒文字',      // 基本形
-        reading: 'クロモジ',       // 読み
-        pronunciation: 'クロモジ'  // 発音
-      } ]
-
-(This is defined in src/util/IpadicFormatter.js)
-
-See also [JSDoc page](https://takuyaa.github.io/kuromoji.js/jsdoc/) in details.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS  
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT  
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR  
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT  
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,  
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT  
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,  
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY  
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT  
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE  
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
