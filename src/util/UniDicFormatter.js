@@ -28,12 +28,15 @@ UniDicFormatter.prototype.formatEntry = function (word_id, position, type, featu
   if (accent < 0) {
     token.accent = new Array(yomiLen).fill(0);
   } else if (accent === 1) {
-    token.accent = [1].concat(...new Array(yomiLen - 1).fill(0));
+    const len = yomiLen - 1;
+    token.accent = [1].concat(...new Array((len < 0) ? 0 : len).fill(0));
   } else {
     if (accent === 0) accent = yomiLen;
+    const lenA = accent - 1;
+    const lenB = yomiLen - accent;
     token.accent = [0].concat(
-      new Array(accent - 1).fill(1).concat(
-        new Array(yomiLen - accent).fill(0)
+      new Array((lenA < 0) ? 0 : lenA).fill(1).concat(
+        new Array((lenB < 0) ? 0 : lenB).fill(0)
       )
     );
   }
